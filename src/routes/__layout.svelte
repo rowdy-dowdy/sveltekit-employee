@@ -1,9 +1,8 @@
 <script context="module" lang="ts">
   import type { Load } from '@sveltejs/kit';
+  import { Fetch } from "$lib/utils/fetch";
 
   export const load: Load = async({ params, fetch, session, url }) => {
-    console.log({ session })
-
     if (!session.user && !url.pathname.includes('/auth/login')) {
       return {
         status: 301,

@@ -16,7 +16,7 @@ const verifyToken = async (token: string) => {
   }
 };
 
-const signToken = async (data: {id: number, name: string, email: string}, time = 3600) => {
+const signToken = async (data: {id: number, name: string, email: string}, time = '1h') => {
   try {
     const token = await jwt.sign({
       id: data.id,

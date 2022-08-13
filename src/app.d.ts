@@ -13,7 +13,7 @@ declare namespace App {
 	// interface PublicEnv {}
 
 	interface Session {
-    user?: {} | null;
+    user?: any;
   }
 
 	// interface Stuff {}

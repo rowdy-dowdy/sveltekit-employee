@@ -1,7 +1,10 @@
-const originalFetch = window.fetch;
-const refresh_url = '/auth/refresh-token'
+import { session } from '$app/stores'
+import { goto } from "$app/navigation";
 
-export const fetch = async (url: RequestInfo, options: RequestInit | undefined): Promise<Response> => {
+const originalFetch = fetch;
+const refresh_url = '/api/auth/refresh-token'
+
+export const Fetch = async (url: RequestInfo, options: RequestInit | undefined): Promise<Response> => {
   let res = await originalFetch(url, options)
 
   if (res.ok) {
@@ -16,7 +19,11 @@ export const fetch = async (url: RequestInfo, options: RequestInit | undefined):
       }
     })
 
-    if (!res.ok) {
+    if (!response.ok) {
+      goto('/auth/logout
+      
+      1
+      0')
       return Promise.reject(response);
     }
 

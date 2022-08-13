@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Container from '$lib/components/Container.svelte';
   import { clickOutside } from "$lib/utils/clickOutSide";
   import { scale } from "svelte/transition";
   import { page } from '$app/stores';
   import { user } from "../../../stores/user";
+  import { session } from '$app/stores'
 
   let clazz:string = '';
   export { clazz as class };
@@ -23,11 +23,11 @@
   }
 </script>
 
-<header class="bg-white shadow border-b border-gray-200 {clazz}">
-  <Container>
+<header class="fixed top-0 left-0 right-0 bg-white shadow border-b border-gray-200 {clazz} z-50">
+  <div class="w-full px-2">
     <div class="flex justify-between items-center">
-      <div class="flex-none py-4 pr-4 md:pr-6 lg:pr-8">
-        <a href="{'#'}" class="flex items-center text-teal-600">
+      <div class="flex-none py-3 pr-4 md:pr-6 lg:pr-8">
+        <a href="/" class="flex items-center text-teal-600">
           <span class="icon w-9 h-9">
             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M17 14a5 5 0 0 0 2.71-.81L20 13a3.16 3.16 0 0 0 .45-.37l.21-.2a4.48 4.48 0 0 0 .48-.58l.06-.08a4.28 4.28 0 0 0 .41-.76 1.57 1.57 0 0 0 .09-.23 4.21 4.21 0 0 0 .2-.63l.06-.25A5.5 5.5 0 0 0 22 9V2l-3 3h-4l-3-3v7a5 5 0 0 0 5 5zm2-7a1 1 0 1 1-1 1 1 1 0 0 1 1-1zm-4 0a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"></path><path d="M11 22v-5H8v5H5V11.9a3.49 3.49 0 0 1-2.48-1.64A3.59 3.59 0 0 1 2 8.5 3.65 3.65 0 0 1 6 5a1.89 1.89 0 0 0 2-2 1 1 0 0 1 1-1 1 1 0 0 1 1 1 3.89 3.89 0 0 1-4 4C4.19 7 4 8.16 4 8.51S4.18 10 6 10h5.09A6 6 0 0 0 19 14.65V22h-3v-5h-2v5z"></path></svg>
           </span>
@@ -43,30 +43,31 @@
         {/each}
       </ul>
       
-      <div class="flex-none py-4 pl-4 md:pl-6 lg:pl-8 relative">
+      <div class="flex-none py-3 pl-4 md:pl-6 lg:pl-8 relative" use:clickOutside on:click_outside={close}>
         <button on:click|preventDefault|stopPropagation="{() => show_option = !show_option}" class="flex items-center space-x-3">
           <div class="flex-none w-9 h-9 rounded-full overflow-hidden bg-teal-600">
             <img src="" alt="">
           </div>
-          <h3 class="text-lg font-semibold">{$user?.name || ''}</h3>
+          <h3 class="text-lg font-semibold">{$session.user?.name || ''}</h3>
           <span class="icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M16.293 9.293 12 13.586 7.707 9.293l-1.414 1.414L12 16.414l5.707-5.707z"></path></svg>
           </span>
         </button>
 
         {#if show_option}
-          <div transition:scale class="have-triangle absolute w-60 right-0 top-[calc(100%-.5rem)] origin-top"
-            use:clickOutside on:click_outside={close}>
+          <div transition:scale class="have-triangle absolute w-60 right-0 top-[calc(100%-.5rem)] origin-top">
             <div class="relative bg-white border  shadow-md rounded-lg overflow-hidden p-2">
-              {#if $user}
-                <a href="/users/{$user.id}" class="block rounded hover:bg-teal-200 p-2">View profile</a>
+              {#if $session.user}
+                <a href="/users/{$session.user.id}" class="block rounded hover:bg-teal-200 p-2">View profile</a>
+                <a href="/settings" class="block rounded hover:bg-teal-200 p-2">Settings</a>
+                <a href="/auth/logout" class="block rounded hover:bg-teal-200 p-2">Logout</a>
               {/if}
             </div>
           </div>
         {/if}
       </div>
     </div>
-  </Container>
+  </div>
 </header>
 
 <style lang="postcss">

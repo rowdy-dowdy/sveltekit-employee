@@ -17,7 +17,7 @@ type User = {
 
 export const POST: RequestHandler = async ({ request, url, clientAddress }) => {
   try {
-    // console.log(1)
+    console.log(1)
     const cookies = cookie.parse(request.headers.get('cookie') || '');
 
     if (!cookies['refresh_token']) {
@@ -39,9 +39,11 @@ export const POST: RequestHandler = async ({ request, url, clientAddress }) => {
 
     const decoded = await verifyToken(cookies['refresh_token']);
 
+    console.log(decoded)
+
     const user = await prisma.users.findUnique({
       where: {
-        id: decoded?.user?.id || 0
+        id: decoded?.id || 0
       },
       select: {
         id: true,
@@ -54,6 +56,8 @@ export const POST: RequestHandler = async ({ request, url, clientAddress }) => {
         }
       }
     })
+
+    console.log(user)
 
     if (!user) {
       throw {
@@ -97,10 +101,7 @@ export const POST: RequestHandler = async ({ request, url, clientAddress }) => {
     // console.log(error)
     return {
       status: error.status || 401,
-      body: responseError({
-        status: error.status || 401,
-        text: 'Invalid Token'
-      })
+      body: responseError(error)
     }
   }
 };

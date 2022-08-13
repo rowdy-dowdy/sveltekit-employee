@@ -20,8 +20,9 @@ type User = {
 export const POST: RequestHandler = async ({ request, url, clientAddress }) => {
   try {
     const body = await request.json()
-    let email: string = removeSpace(body.email ?? ''),
-        password: string = body.password ?? ''
+    let email: string = removeSpace(body.email || ''),
+        password: string = body.password || '',
+        remember: boolean = body.remember || false
 
     var user: User | null = await prisma.users.findUnique({
       where: {
@@ -88,7 +89,9 @@ export const POST: RequestHandler = async ({ request, url, clientAddress }) => {
 
 
     const token = await signToken(user)
-    const refresh_token = await signToken(user, 86400)
+    const refresh_token = await signToken(user, remember ? '60d' : '1d')
+
+    // console.log(refresh_token)
 
     // await prisma.refresh_tokens.create({
     //   data: {
@@ -107,7 +110,7 @@ export const POST: RequestHandler = async ({ request, url, clientAddress }) => {
       headers: {
         'set-cookie': [
           cookie.serialize('token', token, { maxAge: 3600, path: '/' }),
-          cookie.serialize('refresh_token', refresh_token, { maxAge: 86400, path: '/', httpOnly: true })
+          cookie.serialize('refresh_token', refresh_token, { maxAge: remember ? 86400 * 60 : 86400, path: '/', httpOnly: true })
         ]
       }
     }
