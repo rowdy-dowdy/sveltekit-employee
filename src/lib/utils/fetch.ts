@@ -20,10 +20,7 @@ export const Fetch = async (url: RequestInfo, options: RequestInit | undefined):
     })
 
     if (!response.ok) {
-      goto('/auth/logout
-      
-      1
-      0')
+      goto('/auth/logout')
       return Promise.reject(response);
     }
 
