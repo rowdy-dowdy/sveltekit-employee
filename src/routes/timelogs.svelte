@@ -2,12 +2,9 @@
   import type { Load } from '@sveltejs/kit';
 
   export const load: Load = async({ params, fetch, session, url }) => {
-    if (session.user && url.pathname.includes('/auth/login')) {
-      return {
-        status: 301,
-        redirect: '/'
-      }
-    }
+    await new Promise((res) => {
+      setTimeout(res, 5000);
+    })
 
     return {
       status: 200

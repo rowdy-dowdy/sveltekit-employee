@@ -23,7 +23,7 @@ export const Fetch = async (url: RequestInfo, options: RequestInit | undefined):
       goto('/auth/logout')
       return Promise.reject(response);
     }
-
+    
     return await originalFetch(url, options)
   }
   else {

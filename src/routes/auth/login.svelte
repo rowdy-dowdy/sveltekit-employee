@@ -33,7 +33,7 @@
       const data = await res.json()
 
       user.create(data.user)
-      token.create(data.token)
+      // token.create(data.token)
 
       $session.user = data.user
 
