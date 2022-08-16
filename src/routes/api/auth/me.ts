@@ -35,8 +35,6 @@ export const GET: RequestHandler = async ({ request, locals, clientAddress }) =>
       }
     })
 
-    console.log(user)
-
     if (!user) {
       throw {
         status: 404,
@@ -52,7 +50,6 @@ export const GET: RequestHandler = async ({ request, locals, clientAddress }) =>
     }
 
   } catch (error: any) {
-    // console.log(error)
     return {
       status: error.status || 401,
       body: responseError(error)

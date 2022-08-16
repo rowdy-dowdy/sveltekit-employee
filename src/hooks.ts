@@ -5,9 +5,10 @@ import { responseError } from '$lib/utils/response';
 
 export const handle: Handle = async ({ event, resolve }) => {
   const cookies = cookie.parse(event.request.headers.get('cookie') || '');
-
-  if (cookies['token']) {
-    const decoded = await verifyToken(cookies['token']);
+  const token = cookies['token'] || event.url.searchParams.get('token')
+  
+  if (token) {
+    const decoded = await verifyToken(token);
     event.locals.user = decoded
   }
 

@@ -12,11 +12,11 @@ function createUser() {
 	return {
 		subscribe,
 		create: (data: User) => update(n => {
-      localStorage.setItem('user', JSON.stringify(data));
+      // localStorage.setItem('user', JSON.stringify(data));
       return data
     }),
 		reset: () => {
-      localStorage.setItem('user', 'null');
+      // localStorage.setItem('user', 'null');
       set(null)
     }
 	};
@@ -28,11 +28,11 @@ function createToken() {
 	return {
 		subscribe,
 		create: (data: string) => update(n => {
-      localStorage.setItem('token', JSON.stringify(data));
+      // localStorage.setItem('token', JSON.stringify(data));
       return data
     }),
 		reset: () => {
-      localStorage.setItem('token', 'null');
+      // localStorage.setItem('token', 'null');
       set(null)
     }
 	};

@@ -1,18 +1,15 @@
-import { session } from '$app/stores'
-import { goto } from "$app/navigation";
+import { PUBLIC_APP_URL  } from '$env/static/public';
 
-const originalFetch = fetch;
-const refresh_url = '/api/auth/refresh-token'
+const refresh_url = PUBLIC_APP_URL + '/api/auth/refresh-token'
 
-export const Fetch = async (url: RequestInfo, options: RequestInit | undefined): Promise<Response> => {
-  let res = await originalFetch(url, options)
+type typeFetch = (info: RequestInfo, init?: RequestInit | undefined) => Promise<Response>
+type typeFetch2 = (input: RequestInfo, init?: RequestInit | undefined) => Promise<Response>
 
-  if (res.ok) {
-    return res
-  }
+export const Fetch = async (url: string, options: any = undefined, originalFetch: typeFetch | typeFetch2 = fetch): Promise<Response> => {
+  const res = await originalFetch(url, options)
 
-  if (!res.ok && res.status === 401) {
-    let response = await originalFetch(refresh_url, {
+  if (res.status === 401) {
+    const response = await originalFetch(refresh_url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -20,13 +17,13 @@ export const Fetch = async (url: RequestInfo, options: RequestInit | undefined):
     })
 
     if (!response.ok) {
-      goto('/auth/logout')
-      return Promise.reject(response);
+      return response
     }
+
+    const data = await response.json()
     
-    return await originalFetch(url, options)
+    return await originalFetch(`${url}?token=${data?.token}`)
   }
-  else {
-    return Promise.reject(res);
-  }
-};
+
+  return res
+}
