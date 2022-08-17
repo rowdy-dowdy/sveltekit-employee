@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -11,23 +11,24 @@ datasource db {
 }
 
 model users {
-  id         Int              @id @default(autoincrement())
-  email      String           @unique
-  name       String           @db.VarChar(255)
-  password   String           @db.VarChar(255)
-  created_at DateTime         @default(now())
-  updated_at DateTime         @updatedAt
-  provider  user_providers?
-  staff     staffs?
+  id         Int             @id @default(autoincrement())
+  email      String          @unique
+  name       String          @db.VarChar(255)
+  password   String          @db.VarChar(255)
+  avatar     String          @db.VarChar(255)
+  created_at DateTime        @default(now())
+  updated_at DateTime        @updatedAt
+  provider   user_providers?
+  staff      staffs?
 }
 
 model staffs {
-  id          Int             @id @default(autoincrement())
-  uid         Int             @unique
-  name        String          @db.VarChar(255)
+  id          Int           @id @default(autoincrement())
+  uid         Int           @unique
+  name        String        @db.VarChar(255)
   role        Int
-  user_id     Int?            @unique
-  user        users?          @relation(fields: [user_id], references: [id])
+  user_id     Int?          @unique
+  user        users?        @relation(fields: [user_id], references: [id])
   attendances attendances[]
 }
 

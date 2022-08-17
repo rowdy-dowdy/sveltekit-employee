@@ -1,7 +1,6 @@
 import type { Handle, GetSession } from '@sveltejs/kit';
 import * as cookie from 'cookie';
 import { verifyToken } from '$lib/utils/jwt'
-import { responseError } from '$lib/utils/response';
 
 export const handle: Handle = async ({ event, resolve }) => {
   const cookies = cookie.parse(event.request.headers.get('cookie') || '');

@@ -36,6 +36,8 @@ export const POST: RequestHandler = async ({ request, url, clientAddress }) => {
     //   };
     // }
 
+    // console.log(cookies['refresh_token'])
+
     const decoded = await verifyToken(cookies['refresh_token']);
 
     // console.log(decoded)
@@ -97,7 +99,6 @@ export const POST: RequestHandler = async ({ request, url, clientAddress }) => {
     }
 
   } catch (error: any) {
-    // console.log(error)
     return {
       status: error.status || 401,
       body: responseError(error)

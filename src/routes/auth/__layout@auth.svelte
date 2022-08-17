@@ -1,4 +1,4 @@
-<a href="/">Home</a>
+<!-- <a href="/">Home</a> -->
 
 <div class="relative w-full h-full px-12 py-24">
   <div class="bg-full">
@@ -7,10 +7,6 @@
     <div class="bg-full bg-white/70"></div>
   </div>
   <div class="relative mx-auto max-w-7xl">
-    <transition name="auth">
-      <div>
-        <slot/>
-      </div>
-    </transition>
+    <slot/>
   </div>
 </div>

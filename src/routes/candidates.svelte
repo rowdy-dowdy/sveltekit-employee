@@ -93,14 +93,14 @@
         late_afternoon = v.record_time
     })
 
-    if (detail) {
-      return {
-        early_morning,
-        late_morning,
-        early_afternoon,
-        late_afternoon
-      }
-    }
+    // if (detail) {
+    //   return {
+    //     early_morning,
+    //     late_morning,
+    //     early_afternoon,
+    //     late_afternoon
+    //   }
+    // }
 
     let source = 0
     if (early_morning && getTime(early_morning) <= '08:00' || late_morning)

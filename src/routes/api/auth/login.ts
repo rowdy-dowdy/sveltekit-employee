@@ -44,14 +44,14 @@ export const POST: RequestHandler = async ({ request, url, clientAddress }) => {
     if (!user) {
       throw {
         status: 404,
-        message: "Email not exists"
+        text: "Email not exists"
       }
     }
 
     if (!await bcrypt.compare(password, user.password || '')) {
       throw {
         status: 401,
-        message: "Password incorrect"
+        text: "Password incorrect"
       }
     }
 
@@ -116,7 +116,7 @@ export const POST: RequestHandler = async ({ request, url, clientAddress }) => {
     }
 
   } catch (error: any) {
-    // console.log(error)
+    await new Promise((resolve) => setTimeout(resolve, 1000))
     return {
       status: error.status || 500,
       body: responseError(error)

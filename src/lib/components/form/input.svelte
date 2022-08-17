@@ -5,6 +5,8 @@
   export let type:string = 'text'
   export let text:string = ''
   export let name:string = ''
+  export let error:boolean = false
+  export let text_error:string = ''
 
   let clazz:string = '';
   export { clazz as class };
@@ -24,8 +26,8 @@
   
   <template>
     <div on:click="{clickFocus}" 
-      class="relative w-full rounded-lg pl-4 py-2 flex border border-gray-200 bg-gray-50 
-      {focus && '!border-blue-600 !bg-white'} {clazz}">
+      class="relative w-full rounded-lg pl-4 py-2 flex border bg-gray-50 
+      {focus && '!border-blue-600 !bg-white'} {clazz} {error ? 'border-red-500' : 'border-gray-200'}">
       <label for="{id_component}" class="absolute top-0 left-4 h-full px-0.5 flex items-center pointer-events-none">
         <span class="absolute w-full h-0.5 bg-gray-50 -top-0.5 left-0 scale-x-0 transition-all duration-300 origin-center 
           {(focus || text != '') && '!scale-x-100'}"></span>
@@ -53,4 +55,8 @@
         </div>
       </span>
     </div>
+
+    {#if text_error != '' && error}
+      <span class="text-sm text-red-500 font-semibold align-sub">* {text_error}</span>
+    {/if}
   </template>

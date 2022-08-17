@@ -11,37 +11,62 @@
   let email_input    = ''
   let password_input = ''
   let is_remember    = false
+  let loading = false
+  let error_list = {
+    email: '',
+    password: ''
+  }
+
+  const reset = () => {
+    loading = false
+    error_list = {
+      email: '',
+      password: ''
+    }
+  }
 
   const login = async () => {
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        body: JSON.stringify({
-          email: email_input,
-          password: password_input,
-          remember: is_remember
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-
-      if (!res.ok) {
-        throw Error
-      }
-
-      const data = await res.json()
-
-      user.create(data.user)
-      // token.create(data.token)
-
-      $session.user = data.user
-
-      goto('/')
-
-    } catch (error) {
-      console.log(error)
+    if (email_input == '') {
+      error_list.email = 'Email is required'
+      return
     }
+
+    if (password_input == '') {
+      error_list.password = 'Password is required'
+      return
+    }
+
+    reset()
+    loading = true
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: email_input,
+        password: password_input,
+        remember: is_remember
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    const data = await res.json()
+
+    if (res.status == 404) {
+      error_list.email = data.error.message
+    }
+
+    if (res.status == 401) {
+      error_list.password = data.error.message
+    }
+
+    if (res.ok) {
+      user.create(data.user)
+      $session.user = data.user
+      goto('/')
+    }
+
+    loading = false
   }
 </script>
   
@@ -64,12 +89,12 @@
       <p class="mt-2 text-gray-400 text-sm text-center">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
 
       <form on:submit|preventDefault={login} class="mt-12 flex flex-col">
-        <FormInput bind:text="{email_input}" type="email" name="email">
+        <FormInput bind:text="{email_input}" type="email" name="email" error={error_list.email != ''} text_error={error_list.email}>
           <span slot="label">Email</span>
           <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10c1.466 0 2.961-.371 4.442-1.104l-.885-1.793C14.353 19.698 13.156 20 12 20c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8v1c0 .692-.313 2-1.5 2-1.396 0-1.494-1.819-1.5-2V8h-2v.025A4.954 4.954 0 0 0 12 7c-2.757 0-5 2.243-5 5s2.243 5 5 5c1.45 0 2.748-.631 3.662-1.621.524.89 1.408 1.621 2.838 1.621 2.273 0 3.5-2.061 3.5-4v-1c0-5.514-4.486-10-10-10zm0 13c-1.654 0-3-1.346-3-3s1.346-3 3-3 3 1.346 3 3-1.346 3-3 3z"></path></svg>
         </FormInput>
 
-        <FormInput class="mt-5" bind:text="{password_input}" type="password" name="password">
+        <FormInput class="mt-5" bind:text="{password_input}" type="password" name="password" error={error_list.password != ''} text_error={error_list.password}>
           <span slot="label">Password</span>
           <svg slot="icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M12 2C9.243 2 7 4.243 7 7v2H6c-1.103 0-2 .897-2 2v9c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-9c0-1.103-.897-2-2-2h-1V7c0-2.757-2.243-5-5-5zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v2H9V7zm9.002 13H13v-2.278c.595-.347 1-.985 1-1.722 0-1.103-.897-2-2-2s-2 .897-2 2c0 .736.405 1.375 1 1.722V20H6v-9h12l.002 9z"></path></svg>
         </FormInput>
@@ -82,7 +107,17 @@
           <a href="#recovery_password" class="text-sm text-blue-500 font-semibold">Recovery Password</a>
         </div>
 
-        <button type="submit" class="mt-12 bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded font-semibold">Login</button>
+        <button type="submit" 
+          class="relative mt-12 bg-blue-600 hover:bg-blue-500 text-white px-6 py-2 rounded font-semibold overflow-hidden">
+          {#if loading}
+            <span class="absolute w-full h-full top-0 left-0 grid place-items-center bg-blue-600">
+              <div class="icon animate-spin">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M12 22c5.421 0 10-4.579 10-10h-2c0 4.337-3.663 8-8 8s-8-3.663-8-8c0-4.336 3.663-8 8-8V2C6.579 2 2 6.58 2 12c0 5.421 4.579 10 10 10z"></path></svg>
+              </div>
+            </span>
+          {/if}
+          Login
+        </button>
         <button class="mt-4 flex items-center justify-center space-x-2 border bg-white hover:bg-gray-200 px-6 py-2 rounded font-semibold text-gray-500">
           <div class="icon text-red-600">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M20.283 10.356h-8.327v3.451h4.792c-.446 2.193-2.313 3.453-4.792 3.453a5.27 5.27 0 0 1-5.279-5.28 5.27 5.27 0 0 1 5.279-5.279c1.259 0 2.397.447 3.29 1.178l2.6-2.599c-1.584-1.381-3.615-2.233-5.89-2.233a8.908 8.908 0 0 0-8.934 8.934 8.907 8.907 0 0 0 8.934 8.934c4.467 0 8.529-3.249 8.529-8.934 0-.528-.081-1.097-.202-1.625z"></path></svg>

@@ -47,8 +47,10 @@
   //   user.create($session.user)
 </script>
 
-<div id="app" class="min-h-screen flex flex-col text-[#444]">
+<div id="app" class="min-h-screen flex flex-col text-[#444] bg-gray-100">
   <Header/>
   
-  <slot />
+  <div class="pt-16">
+    <slot />
+  </div>
 </div>

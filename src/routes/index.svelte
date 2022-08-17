@@ -9,7 +9,7 @@
   })
 </script>
 
-<div class="flex justify-center lg:justify-between relative">
+<div class="flex justify-center lg:justify-between relative -mt-16">
   <!-- LEFT MENU -->
   <div class="sticky top-0 pt-16 h-screen hidden xl:block" style="width: 22.5rem;">
     <div class="h-full flex flex-col overflow-auto" data-scrollbar>
