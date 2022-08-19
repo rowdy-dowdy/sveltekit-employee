@@ -22,7 +22,7 @@
 
 @layer base {
   html, body {
-    @apply text-[#444];
+    @apply text-[#444] h-full;
   }
   
   * {

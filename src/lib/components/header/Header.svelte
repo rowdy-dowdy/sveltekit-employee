@@ -21,7 +21,7 @@
             ref_line.style.transition = 'none'
             ref_line.style.width = '0'
           }
-        }, 100);
+        }, 150);
       }
       else {
         reset = null
